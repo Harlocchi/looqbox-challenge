@@ -1,9 +1,12 @@
 package com.looqbox.pokemon.service
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.looqbox.pokemon.connection.PokeapiConnection
 import com.looqbox.pokemon.enums.PokemonSortEnum
 import com.looqbox.pokemon.enviroment.Enviroment
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class PokemonService {
@@ -13,21 +16,28 @@ class PokemonService {
 
     fun getPokemonResult(query : String, pokemonSortEnum: PokemonSortEnum) : List<String>{
 
-        var urlNext = Enviroment.pokeApiUrl
+        var urlNext: String? = Enviroment.pokeApiUrl;
 
-        do{
-            val requestCode = connection
+        while (urlNext != null) {
+            val response = connection
                 .url(urlNext)
                 .method("GET")
                 .sendRequest();
 
-            urlNext = requestCode
-        }while ()
+            val body = jsonToMap(response.toString());
+            println(body)
 
-
-        println(requestCode)
+            urlNext = body["next"] as? String;
+        }
 
         return ArrayList<String>(0)
+    }
+
+    private fun jsonToMap(json : String) : Map<String, Any>{
+        val mapper = jacksonObjectMapper()
+        val jsonMap: Map<String, Any> = mapper.readValue(json)
+
+        return jsonMap
     }
 
 

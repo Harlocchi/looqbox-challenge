@@ -59,6 +59,8 @@ class PokeapiConnection private constructor(){
         val mapper = jacksonObjectMapper()
         val jsonMap: Map<String, Any> = mapper.readValue(response.toString())
 
+
+
         reader.close()
         inputStream.close()
         return emptyList()

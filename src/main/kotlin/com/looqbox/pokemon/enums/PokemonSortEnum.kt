@@ -5,6 +5,4 @@ enum class PokemonSortEnum() {
     ALPHABETICAL,
     LENGHT;
 
-
-
 }

@@ -11,11 +11,15 @@ class PokemonController(private val pokemonService : PokemonService) {
 
 
     @GetMapping("/pokemons")
-
     fun getPokemons(@RequestParam query: String? = "",
                    @RequestParam sort: PokemonSortEnum? = PokemonSortEnum.ALPHABETICAL) : String{
 
-        pokemonService.getPokemonResult(query!!, sort!!)
+        try {
+            pokemonService.getPokemonResult(query!!, sort!!)
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
+
 
         return "aAAS"
     }
