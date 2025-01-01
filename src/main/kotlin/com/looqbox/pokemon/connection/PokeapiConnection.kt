@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.looqbox.pokemon.entity.PokemonResponse
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -34,7 +35,7 @@ class PokeapiConnection private constructor(){
 
 
 
-    fun sendRequest() : List<String>{
+    fun sendRequest() : PokemonResponse{
         val urlReady = this.url;
 
 
@@ -56,14 +57,14 @@ class PokeapiConnection private constructor(){
             response.append(line)
         }
 
-        val mapper = jacksonObjectMapper()
-        val jsonMap: Map<String, Any> = mapper.readValue(response.toString())
-
-
+        val objectMapper = jacksonObjectMapper()
+        val pokemonResponse: PokemonResponse = objectMapper.readValue(response.toString())
 
         reader.close()
         inputStream.close()
-        return emptyList()
+
+        return pokemonResponse
+
     }
 
 

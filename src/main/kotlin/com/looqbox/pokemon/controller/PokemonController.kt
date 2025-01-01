@@ -14,6 +14,7 @@ class PokemonController(private val pokemonService : PokemonService) {
     fun getPokemons(@RequestParam query: String? = "",
                    @RequestParam sort: PokemonSortEnum? = PokemonSortEnum.ALPHABETICAL) : String{
 
+
         try {
             pokemonService.getPokemonResult(query!!, sort!!)
         }catch (e : Exception){
