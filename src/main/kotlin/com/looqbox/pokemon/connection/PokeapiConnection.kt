@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.looqbox.pokemon.entity.PokemonResponse
+import org.springframework.web.client.HttpStatusCodeException
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -36,35 +37,32 @@ class PokeapiConnection private constructor(){
 
 
     fun sendRequest() : PokemonResponse{
-        val urlReady = this.url;
+
+            val urlReady = this.url;
+            val url = URL(urlReady)
+            val connection: HttpURLConnection = (url.openConnection() as HttpURLConnection);
+            connection.requestMethod = this.method;
 
 
-        val url = URL(urlReady)
-        val connection : HttpURLConnection = (url.openConnection() as HttpURLConnection);
-        connection.requestMethod = this.method;
-
-        val inputStream = connection.inputStream;
-        val reader = BufferedReader(InputStreamReader(inputStream));
-        val response = StringBuilder();
+            val inputStream = connection.inputStream;
+            val reader = BufferedReader(InputStreamReader(inputStream));
+            val response = StringBuilder();
 
 
+            var line: String?
+            while (true) {
+                line = reader.readLine();
+                if (line == null) break;
 
-        var line: String?
-        while (true){
-            line = reader.readLine();
-            if(line == null) break;
+                response.append(line)
+            }
 
-            response.append(line)
-        }
+            val objectMapper = jacksonObjectMapper()
+            val pokemonResponse: PokemonResponse = objectMapper.readValue(response.toString())
 
-        val objectMapper = jacksonObjectMapper()
-        val pokemonResponse: PokemonResponse = objectMapper.readValue(response.toString())
-
-        reader.close()
-        inputStream.close()
-
-
-        return pokemonResponse
+            reader.close()
+            inputStream.close()
+            return pokemonResponse
 
     }
 
