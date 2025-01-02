@@ -3,6 +3,8 @@ package com.looqbox.pokemon.service
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.looqbox.pokemon.connection.PokeapiConnection
+import com.looqbox.pokemon.entity.CacheItem
+import com.looqbox.pokemon.entity.CacheManager
 import com.looqbox.pokemon.entity.Pokemon
 import com.looqbox.pokemon.entity.PokemonHighlight
 import com.looqbox.pokemon.enums.CacheType
@@ -14,6 +16,7 @@ import com.looqbox.pokemon.strategy.LenghtSort
 import com.looqbox.pokemon.strategy.SortContext
 import org.springframework.stereotype.Service
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -27,27 +30,52 @@ class PokemonService {
     fun getPokemon(query : String, pokemonSortEnum: PokemonSortEnum) : List<String>{
         var cacheType = CacheType.POKEMONS
 
-       var names: List<String>;
+        var names: List<String>;
+        var getOnCache = CacheManager.isPresent(query, pokemonSortEnum, cacheType)
 
-       try {
+        if (getOnCache != null){
+            if(CacheManager.isExpired(getOnCache)){
+                CacheManager.removeCache(getOnCache)
+            }else{
+                return getOnCache.value as List<String>
+            }
+        }
+
+
+        try {
            names = fetchPokemons();
-       }catch (exc : Exception){
+        }catch (exc : Exception){
             throw Exception("could not perform request")
-       }
+        }
 
-       if(names.isNotEmpty()){
+        if(names.isNotEmpty()){
            names = sortByType(names, pokemonSortEnum);
-       }
-       if(query.isNotEmpty()){
+        }
+        if(query.isNotEmpty()){
            names = filterByQuery(names, query)
-       }
+        }
 
-       return names
+        val cacheToSave = CacheItem(query, pokemonSortEnum, cacheType, names, LocalDateTime.now())
+        CacheManager.addCache(cacheToSave)
+
+        return names
     }
+
+
 
     fun getPokemonHighlight(query: String ,pokemonSortEnum : PokemonSortEnum): List<PokemonHighlight>{
         var cacheType = CacheType.HIGHLIGHT
         var names: List<String>;
+
+        var getOnCache = CacheManager.isPresent(query, pokemonSortEnum, cacheType)
+
+        if (getOnCache != null){
+            if(CacheManager.isExpired(getOnCache)){
+                CacheManager.removeCache(getOnCache)
+            }else{
+                return getOnCache.value as List<PokemonHighlight>
+            }
+        }
 
         try {
             names = fetchPokemons();
@@ -62,7 +90,11 @@ class PokemonService {
             names = filterByQuery(names, query)
         }
 
-       return makeHighlight(query, names)
+        var pokemonHighlightList = makeHighlight(query, names)
+        val cacheToSave = CacheItem(query, pokemonSortEnum, cacheType, pokemonHighlightList, LocalDateTime.now())
+        CacheManager.addCache(cacheToSave)
+
+        return pokemonHighlightList
     }
 
     fun makeHighlight(query: String, names : List<String>) : List<PokemonHighlight>{
@@ -124,13 +156,6 @@ class PokemonService {
 
         var time = LocalDateTime.now()
         return sortContext.sort(names.toMutableList())
-    }
-
-
-
-
-    fun cacheExist(){
-
     }
 
 }
