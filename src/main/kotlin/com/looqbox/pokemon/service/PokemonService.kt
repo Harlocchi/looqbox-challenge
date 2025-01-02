@@ -146,9 +146,6 @@ class PokemonService {
         }
 
         val sortContext  = SortContext(sortType)
-        var auxList = ArrayList<String>()
-
-        var time = LocalDateTime.now()
         return sortContext.sort(names.toMutableList())
     }
 

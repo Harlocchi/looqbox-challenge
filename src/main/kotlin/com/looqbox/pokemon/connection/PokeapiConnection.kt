@@ -40,7 +40,7 @@ class PokeapiConnection private constructor(){
             val connection: HttpURLConnection = (url.openConnection() as HttpURLConnection);
             connection.requestMethod = this.method;
 
-
+            //buffer to read a body response
             val inputStream = connection.inputStream;
             val reader = BufferedReader(InputStreamReader(inputStream));
             val response = StringBuilder();
@@ -54,6 +54,8 @@ class PokeapiConnection private constructor(){
                 response.append(line)
             }
 
+
+            //convert String to Pokemon Response
             val objectMapper = jacksonObjectMapper()
             val pokemonResponse: PokemonResponse = objectMapper.readValue(response.toString())
 
