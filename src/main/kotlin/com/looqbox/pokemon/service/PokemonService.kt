@@ -1,24 +1,18 @@
 package com.looqbox.pokemon.service
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.looqbox.pokemon.connection.PokeapiConnection
 import com.looqbox.pokemon.entity.CacheItem
 import com.looqbox.pokemon.entity.CacheManager
-import com.looqbox.pokemon.entity.Pokemon
 import com.looqbox.pokemon.entity.PokemonHighlight
 import com.looqbox.pokemon.enums.CacheType
 import com.looqbox.pokemon.enums.PokemonSortEnum
-import com.looqbox.pokemon.enviroment.Enviroment
+import com.looqbox.pokemon.environment.Enviroment
 import com.looqbox.pokemon.strategy.AlphabeticalSort
 import com.looqbox.pokemon.strategy.ISort
 import com.looqbox.pokemon.strategy.LenghtSort
 import com.looqbox.pokemon.strategy.SortContext
 import org.springframework.stereotype.Service
-import java.time.Duration
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.*
 import kotlin.collections.ArrayList
 
 @Service

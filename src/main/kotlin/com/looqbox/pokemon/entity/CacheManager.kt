@@ -10,7 +10,6 @@ class CacheManager(){
     companion object{
         var cacheList : MutableList<CacheItem> = mutableListOf()
 
-
         fun addCache(item: CacheItem){
             cacheList.add(item)
         }
