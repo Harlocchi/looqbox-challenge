@@ -1,5 +1,5 @@
 package com.looqbox.pokemon.strategy
 
 interface ISort{
-    fun sort(data: List<String>): List<String>
+    fun sort(list : MutableList<String>) : ArrayList<String>
 }

@@ -6,7 +6,13 @@ import com.looqbox.pokemon.connection.PokeapiConnection
 import com.looqbox.pokemon.entity.Pokemon
 import com.looqbox.pokemon.enums.PokemonSortEnum
 import com.looqbox.pokemon.enviroment.Enviroment
+import com.looqbox.pokemon.strategy.AlphabeticalSort
+import com.looqbox.pokemon.strategy.ISort
+import com.looqbox.pokemon.strategy.LenghtSort
+import com.looqbox.pokemon.strategy.SortContext
 import org.springframework.stereotype.Service
+import java.time.Duration
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -34,8 +40,19 @@ class PokemonService {
             urlNext = response.next
         }
 
-        println(names.toString())
-        return ArrayList<String>(0)
+        var sortType : ISort = AlphabeticalSort();
+        if(pokemonSortEnum.equals(PokemonSortEnum.LENGHT)){
+            sortType = LenghtSort()
+        }
+
+        var sortContext : SortContext = SortContext(sortType)
+        var auxList = ArrayList<String>()
+
+        var time = LocalDateTime.now()
+        println(sortContext.sort(names.toMutableList()))
+        println(Duration.between(time, LocalDateTime.now()).toMillis())
+
+        return sortContext.sort(names.toMutableList())
     }
 
 

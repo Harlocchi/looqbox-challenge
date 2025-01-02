@@ -7,7 +7,7 @@ class SortContext(private var strategy: ISort) {
         this.strategy = strategy
     }
 
-    fun sort(data: List<String>): List<String> {
-        return strategy.sort(data)
+    fun sort(list : MutableList<String>): ArrayList<String> {
+        return strategy.sort(list)
     }
 }
