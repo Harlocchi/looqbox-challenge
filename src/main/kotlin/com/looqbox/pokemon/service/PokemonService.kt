@@ -1,9 +1,9 @@
 package com.looqbox.pokemon.service
 
 import com.looqbox.pokemon.connection.PokeapiConnection
-import com.looqbox.pokemon.entity.CacheItem
-import com.looqbox.pokemon.entity.CacheManager
-import com.looqbox.pokemon.entity.PokemonHighlight
+import com.looqbox.pokemon.model.CacheItem
+import com.looqbox.pokemon.model.CacheManager
+import com.looqbox.pokemon.model.PokemonHighlight
 import com.looqbox.pokemon.enums.CacheType
 import com.looqbox.pokemon.enums.PokemonSortEnum
 import com.looqbox.pokemon.environment.Enviroment

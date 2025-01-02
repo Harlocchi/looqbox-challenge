@@ -1,6 +1,6 @@
 package com.looqbox.pokemon.controller
 
-import com.looqbox.pokemon.entity.PokemonHighlight
+import com.looqbox.pokemon.model.PokemonHighlight
 import com.looqbox.pokemon.enums.PokemonSortEnum
 import com.looqbox.pokemon.service.PokemonService
 import org.springframework.http.HttpStatus

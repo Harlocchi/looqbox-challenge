@@ -1,4 +1,4 @@
-package com.looqbox.pokemon.entity
+package com.looqbox.pokemon.model
 
 import com.looqbox.pokemon.enums.CacheType
 import com.looqbox.pokemon.enums.PokemonSortEnum

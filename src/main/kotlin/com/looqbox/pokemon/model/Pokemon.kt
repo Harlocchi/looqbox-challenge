@@ -1,4 +1,4 @@
-package com.looqbox.pokemon.entity
+package com.looqbox.pokemon.model
 
 class Pokemon(
     var name : String,

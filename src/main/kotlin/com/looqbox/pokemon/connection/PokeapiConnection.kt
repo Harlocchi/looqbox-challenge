@@ -1,11 +1,8 @@
 package com.looqbox.pokemon.connection
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.looqbox.pokemon.entity.PokemonResponse
-import org.springframework.web.client.HttpStatusCodeException
+import com.looqbox.pokemon.model.PokemonResponse
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
