@@ -63,6 +63,7 @@ class PokeapiConnection private constructor(){
         reader.close()
         inputStream.close()
 
+
         return pokemonResponse
 
     }
