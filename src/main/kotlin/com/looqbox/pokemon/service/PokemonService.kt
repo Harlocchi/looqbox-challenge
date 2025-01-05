@@ -79,7 +79,7 @@ class PokemonService {
             if(query.isEmpty()){
                 objHighlight = PokemonHighlight(it, it)
             }else{
-                objHighlight = PokemonHighlight(it, it.replace(query, "<pre>$query</pre>", ignoreCase = true))
+                objHighlight = PokemonHighlight(it, it.replace(query, "<pre>${query.lowercase()}</pre>", ignoreCase = true))
             }
 
             highLighList.add(objHighlight)
@@ -115,7 +115,7 @@ class PokemonService {
     fun filterByQuery(list: List<String>, query: String) : List<String>{
         val filterList: MutableList<String> = mutableListOf()
         list.map {
-            if(it.contains(query)) filterList.add(it)
+            if(it.contains(query, ignoreCase = true)) filterList.add(it)
         }
         return ArrayList(filterList)
     }
