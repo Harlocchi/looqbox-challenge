@@ -79,7 +79,7 @@ class PokemonService {
             if(query.isEmpty()){
                 objHighlight = PokemonHighlight(it, it)
             }else{
-                objHighlight = PokemonHighlight(it, it.replace(query, "<pre>$query</pre>"))
+                objHighlight = PokemonHighlight(it, it.replace(query, "<pre>$query</pre>", ignoreCase = true))
             }
 
             highLighList.add(objHighlight)
