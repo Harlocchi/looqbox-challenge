@@ -106,7 +106,7 @@ when applying data processing, such as a sorting algorithm, in the back-end, it 
 
 - **External API Dependency:**
 By depending on an external API, we are subject to delayed responses. When this happens, processing is stalled while waiting for the response. In the case of many requests, this can become a bottleneck. My solution would be to implement asynchronous requests to free up processing while waiting for a response.
-## ✨My Bonus✨
+## ✨My Bonus - AWS✨
 
 This application is running on AWS with the following steps:
 
