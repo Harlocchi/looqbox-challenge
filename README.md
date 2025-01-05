@@ -97,7 +97,8 @@ but, I decided to sacrifice ease of understanding for performance, I applied the
 implements a Builder pattern to create an instance of the **PokeapiConnection** class. It allows you to define the HTTP method and the request URL in a intuitive and easy to understand way. 
 
 - **Strategy**
-I used the Strategy Pattern to deal with the different types of sorting. The pattern allows me to define a family of sorting algorithms and change the sorting algorithm at runtime
+- 
+used the Strategy Pattern to deal with the different types of sorting. The pattern allows me to define a family of sorting algorithms and change the sorting algorithm at runtime
 ## Possible Bottlenecks
 
 - **Data processing in the back-end:**
@@ -111,8 +112,8 @@ This application is running on AWS with the following steps:
 
 - Creation and configuration of an EC2 instance.  
 - Route 53 configuration for DNS resolution.
-- Pointing the domain to the instance's IP.
-I needed to generate the .jar file locally on my machine, place it in an S3 bucket, and then use the AWS CLI to transfer it to the instance.
+- Pointing the domain to the instance's IP.  
+needed to generate the .jar file locally on my machine, place it in an S3 bucket, and then use the AWS CLI to transfer it to the instance.
 
 https://harlocchi.cloud/pokemons  
 https://harlocchi.cloud/pokemons/highlight
