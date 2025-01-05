@@ -1,4 +1,4 @@
-package com.looqbox.pokemon.Config
+package com.looqbox.pokemon.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
@@ -12,6 +12,6 @@ class CorsConfig : WebMvcConfigurer {
             .allowedOrigins("*")
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowedHeaders("*")
-            .allowCredentials(true)
+            .allowCredentials(false)
     }
 }

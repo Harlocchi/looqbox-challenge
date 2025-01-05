@@ -32,7 +32,7 @@ class PokeapiConnection private constructor(){
     }
 
 
-
+    //send request to pokeApi
     fun sendRequest() : PokemonResponse{
 
             val urlReady = this.url;

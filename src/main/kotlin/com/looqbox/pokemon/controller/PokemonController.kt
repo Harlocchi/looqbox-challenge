@@ -27,6 +27,7 @@ class PokemonController(private val pokemonService : PokemonService) {
             mapToReturn.put("result", pokemons)
             ResponseEntity.ok(mapToReturn)
         }catch (e : Exception){
+            println(e.printStackTrace())
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null)
         }
     }
@@ -44,6 +45,7 @@ class PokemonController(private val pokemonService : PokemonService) {
             mapToReturn.put("result", pokemons)
             ResponseEntity.ok(mapToReturn)
         }catch (e : Exception){
+
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null)
         }
     }
