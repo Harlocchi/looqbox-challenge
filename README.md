@@ -97,7 +97,7 @@ but, I decided to sacrifice ease of understanding for performance, I applied the
 implements a Builder pattern to create an instance of the **PokeapiConnection** class. It allows you to define the HTTP method and the request URL in a intuitive and easy to understand way. 
 
 - **Strategy**
-- 
+
 used the Strategy Pattern to deal with the different types of sorting. The pattern allows me to define a family of sorting algorithms and change the sorting algorithm at runtime
 ## Possible Bottlenecks
 
