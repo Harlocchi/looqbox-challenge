@@ -1,6 +1,5 @@
-package com.looqbox.pokemon.Controller
+package com.looqbox.pokemon.controller
 
-import com.looqbox.pokemon.controller.PokemonController
 import com.looqbox.pokemon.enums.PokemonSortEnum
 import com.looqbox.pokemon.model.PokemonHighlight
 import com.looqbox.pokemon.service.PokemonService
@@ -12,7 +11,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 
-class PokemonControllerTest {
+class PokemonTestController {
+
 
     private val pokemonService: PokemonService = mock(PokemonService::class.java)
     private val pokemonController = PokemonController(pokemonService)
@@ -77,4 +77,5 @@ class PokemonControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.statusCode)
     }
+
 }
