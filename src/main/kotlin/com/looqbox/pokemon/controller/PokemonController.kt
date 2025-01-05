@@ -17,12 +17,17 @@ class PokemonController(private val pokemonService : PokemonService) {
 
     @GetMapping()
     fun getPokemons(@RequestParam query: String? = "",
-                   @RequestParam sort: PokemonSortEnum? = PokemonSortEnum.ALPHABETICAL): ResponseEntity<List<Any>> {
+                   @RequestParam sort: PokemonSortEnum? = PokemonSortEnum.ALPHABETICAL): ResponseEntity<Map<String, List<String>>> {
 
         return try {
             var pokemons = pokemonService.getPokemon(query!!, sort!!)
-            ResponseEntity.ok(pokemons)
+            val mapToReturn : HashMap<String, List<String>> = hashMapOf()
+
+            //add pokemon on result
+            mapToReturn.put("result", pokemons)
+            ResponseEntity.ok(mapToReturn)
         }catch (e : Exception){
+            println(e.printStackTrace())
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null)
         }
     }
@@ -30,12 +35,17 @@ class PokemonController(private val pokemonService : PokemonService) {
 
     @GetMapping("/highlight")
     fun getPokemonsHighlight(@RequestParam query: String? = "",
-                    @RequestParam sort: PokemonSortEnum? = PokemonSortEnum.ALPHABETICAL): ResponseEntity<List<PokemonHighlight>> {
+                    @RequestParam sort: PokemonSortEnum? = PokemonSortEnum.ALPHABETICAL): ResponseEntity<Map<String, List<PokemonHighlight>>> {
 
         return try {
             val pokemons = pokemonService.getPokemonHighlight(query!!, sort!!)
-            ResponseEntity.ok(pokemons)
+            val mapToReturn : HashMap<String, List<PokemonHighlight>> = hashMapOf()
+
+            //add pokemon on results
+            mapToReturn.put("result", pokemons)
+            ResponseEntity.ok(mapToReturn)
         }catch (e : Exception){
+
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null)
         }
     }

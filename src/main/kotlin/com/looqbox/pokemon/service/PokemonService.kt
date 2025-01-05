@@ -1,8 +1,8 @@
 package com.looqbox.pokemon.service
 
 import com.looqbox.pokemon.connection.PokeapiConnection
-import com.looqbox.pokemon.model.CacheItem
-import com.looqbox.pokemon.model.CacheManager
+import com.looqbox.pokemon.cache.CacheItem
+import com.looqbox.pokemon.cache.CacheManager
 import com.looqbox.pokemon.model.PokemonHighlight
 import com.looqbox.pokemon.enums.CacheType
 import com.looqbox.pokemon.enums.PokemonSortEnum
@@ -23,24 +23,17 @@ class PokemonService {
 
     fun getPokemon(query : String, pokemonSortEnum: PokemonSortEnum) : List<String>{
         var cacheType = CacheType.POKEMONS
-
         var names: List<String>;
-        var getOnCache = CacheManager.isPresent(query, pokemonSortEnum, cacheType)
 
-        if (getOnCache != null){
-            if(CacheManager.isExpired(getOnCache)){
-                CacheManager.removeCache(getOnCache)
-            }else{
-                return getOnCache.value as List<String>
-            }
+        if((CacheManager.cache == null) || (CacheManager.isExpired())){
+            names = fetchPokemons()
+            //save the new cache
+            val cacheItem = CacheItem(names, LocalDateTime.now())
+            CacheManager.updateCache(cacheItem)
+        }else{
+            names = CacheManager.cache?.value!!
         }
 
-
-        try {
-           names = fetchPokemons();
-        }catch (exc : Exception){
-            throw Exception("could not perform request")
-        }
 
         if(names.isNotEmpty()){
            names = sortByType(names, pokemonSortEnum);
@@ -49,32 +42,21 @@ class PokemonService {
            names = filterByQuery(names, query)
         }
 
-        val cacheToSave = CacheItem(query, pokemonSortEnum, cacheType, names, LocalDateTime.now())
-        CacheManager.addCache(cacheToSave)
 
         return names
     }
 
-
-
     fun getPokemonHighlight(query: String ,pokemonSortEnum : PokemonSortEnum): List<PokemonHighlight>{
-        var cacheType = CacheType.HIGHLIGHT
-        var names: List<String>;
+        var names: List<String> = emptyList();
 
-        var getOnCache = CacheManager.isPresent(query, pokemonSortEnum, cacheType)
-
-        if (getOnCache != null){
-            if(CacheManager.isExpired(getOnCache)){
-                CacheManager.removeCache(getOnCache)
-            }else{
-                return getOnCache.value as List<PokemonHighlight>
-            }
-        }
-
-        try {
-            names = fetchPokemons();
-        }catch (exc : Exception){
-            throw Exception("could not perform request")
+        //if cache does not exist or is expired
+        if((CacheManager.cache == null) || (CacheManager.isExpired())){
+            names = fetchPokemons()
+            //save the new cache
+            val cacheItem = CacheItem(names, LocalDateTime.now())
+            CacheManager.updateCache(cacheItem)
+        }else{
+            names = CacheManager.cache?.value!!
         }
 
         if(names.isNotEmpty()){
@@ -84,12 +66,10 @@ class PokemonService {
             names = filterByQuery(names, query)
         }
 
-        var pokemonHighlightList = makeHighlight(query, names)
-        val cacheToSave = CacheItem(query, pokemonSortEnum, cacheType, pokemonHighlightList, LocalDateTime.now())
-        CacheManager.addCache(cacheToSave)
-
+        val pokemonHighlightList = makeHighlight(query, names)
         return pokemonHighlightList
     }
+
 
     fun makeHighlight(query: String, names : List<String>) : List<PokemonHighlight>{
         val highLighList : MutableList<PokemonHighlight> = mutableListOf()
@@ -97,7 +77,7 @@ class PokemonService {
             val objHighlight : PokemonHighlight;
 
             if(query.isEmpty()){
-                objHighlight = PokemonHighlight(it, "<pre>$it</pre>")
+                objHighlight = PokemonHighlight(it, it)
             }else{
                 objHighlight = PokemonHighlight(it, it.replace(query, "<pre>$query</pre>"))
             }
@@ -107,48 +87,45 @@ class PokemonService {
         return ArrayList(highLighList)
     }
 
-    fun fetchPokemons() : List<String>{
-
-        var urlNext: String? = Enviroment.pokeApiUrl;
+    fun fetchPokemons(): List<String> {
+        var urlNext: String? = Enviroment.pokeApiUrl
         val names = ArrayList<String>()
 
-        while (urlNext != null) {
-            val response = connection
-                .url(urlNext)
-                .method("GET")
-                .sendRequest();
+        try {
+            while (urlNext != null) {
+                val response = connection
+                    .url(urlNext)
+                    .method("GET")
+                    .sendRequest()
 
-            response.results.forEach{ pokemon ->
-                names.add(pokemon.name)
+                response.results.forEach { pokemon ->
+                    names.add(pokemon.name)
+                }
+                urlNext = response.next
             }
-
-            urlNext = response.next
+        } catch (e: Exception) {
+            println("Erro ao buscar pokémons: ${e.message}")
+            e.printStackTrace()
         }
 
         return names
     }
 
-    fun filterByQuery(list: List<String>, query: String) : List<String>{
 
+    fun filterByQuery(list: List<String>, query: String) : List<String>{
         val filterList: MutableList<String> = mutableListOf()
         list.map {
             if(it.contains(query)) filterList.add(it)
         }
-
         return ArrayList(filterList)
     }
 
     fun sortByType(names: List<String>, pokemonSortEnum : PokemonSortEnum) : List<String>{
-
         var sortType : ISort = AlphabeticalSort();
         if(pokemonSortEnum.equals(PokemonSortEnum.LENGHT)){
             sortType = LenghtSort()
         }
-
         val sortContext  = SortContext(sortType)
-        var auxList = ArrayList<String>()
-
-        var time = LocalDateTime.now()
         return sortContext.sort(names.toMutableList())
     }
 
