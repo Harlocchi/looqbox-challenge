@@ -117,3 +117,5 @@ needed to generate the .jar file locally on my machine, place it in an S3 bucket
 
 https://harlocchi.cloud/pokemons  
 https://harlocchi.cloud/pokemons/highlight
+
+UPDATE: this API was deployed on AWS free Trial, because this reason its offline now :( 
